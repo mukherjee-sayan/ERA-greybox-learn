@@ -1,13 +1,21 @@
 # `tLsep`: Greybox Learning of Languages Recognizable by Event-Recording Automata
 
-This repository implements the Greybox learning algorithm `tLsep` that is proposed in the following paper, that is to appear in the proceedings of [ATVA 2024](https://atva-conference.org/2024/).
+This repository implements the Greybox learning algorithm `tLsep` that is proposed in the following paper.
 
 > **Greybox Learning of Languages Recognizable by Event-Recording Automata** \
-> Anirban Majumdar, Sayan Mukherjee, and Jean-François Raskin
+> Anirban Majumdar, Sayan Mukherjee, and Jean-François Raskin\
+> to appear, in the proceedings of [ATVA 2024](https://atva-conference.org/2024/)
 
-We provide a `Dockerfile` to optionally use our tool inside Docker.
+Some parts of our implementation have been inspired from the implementation of L* algorithm in [AALpy](https://github.com/DES-Lab/AALpy). We provide two methods for using our tool.
 
-## Building the Docker Image
+## Dependencies
+
+Our tool relies on the following two tools:
+
+- [TChecker](https://github.com/ticktac-project/tchecker): we use this for checking language emptiness of an ERA
+- [Z3](https://github.com/Z3Prover/z3): we use the [Python API of Z3](https://github.com/Z3Prover/z3?tab=readme-ov-file#python) to check if a symbolic word is empty 
+
+## 1. Building using Docker Image
 
 - Install Docker as described at https://docs.docker.com/get-docker/.
 
@@ -34,22 +42,19 @@ We provide a `Dockerfile` to optionally use our tool inside Docker.
   python3 tLsep.py --sul ../examples/ex1.txt --m 1
   ```
 
-## Using our Tool without a Docker Environment
-
-
-### Quickstart
+## 2. Using our Tool without a Docker Environment
 
 #### 1. Requirements
 
-Our tool relies on the following open-source software.
+Our tool relies on the following open-source software. These must be installed before running our tool.
 
-  - [TChecker](https://github.com/ticktac-project/tchecker/wiki/Installation-of-TChecker) and its dependencies
+  - [TChecker](https://github.com/ticktac-project/tchecker/wiki/Installation-of-TChecker) and its [dependencies](https://github.com/ticktac-project/tchecker/wiki/Installation-of-TChecker#requirements)
 
-  - The [Python API](https://github.com/Z3Prover/z3?tab=readme-ov-file#python) of [Z3](https://github.com/Z3Prover/z3)
+  - The [Python API of Z3](https://github.com/Z3Prover/z3?tab=readme-ov-file#python)
 
 #### 2. Downloading the tool
 
-The source code of our tool can be downloded from the repository [GitHub](https://github.com/mukherjee-sayan/ERA-greybox-learn.git) using the following code.
+The source code of our tool can be downloded by cloning [this repository](https://github.com/mukherjee-sayan/ERA-greybox-learn.git).
 
 ```
 git clone https://github.com/mukherjee-sayan/ERA-greybox-learn.git
@@ -60,18 +65,23 @@ git clone https://github.com/mukherjee-sayan/ERA-greybox-learn.git
 The directory `tlsep` contains all the necessary files
 to execute the tool, and the directory `examples` contains a few example automata that can be learnt using our tool.
 
-To infer a new ERA (the so called, 'system under learning'), one needs to follow the syntax we use for specifying an ERA. This syntax is described in the file [file-format.md](file-format.md). 
-In the input file the user needs to specify the events to be present in the automaton and mark those events whose corresponding clocks will appear on the guards, as `active`.
+To learn a new ERA-recognizable language, one needs to provide to the algorithm an ERA (the so-called, 'system under learning') that recognizes the target language. 
+This ERA *needs to* follow the syntax described in [file-format.md](file-format.md).
+In the input file, the user needs to specify the set of events of the automaton, and mark those events whose corresponding clocks will appear on the guards, as `active`. 
 
-One also needs to specify the path to the executable `tck-reach` (which will be built when installing `TChecker`) in the file [config.py](./tlsep/config.py).
+Before being able to run `tLsep`, the user **must** do the following: 
 
-One then **needs to change the current directory** to [tlsep](./tlsep/) and then `tLsep` can be executed to learn the new automaton by executing the following:
+- the user **needs to specify the path** to the executable `tck-reach` (which will be built when installing `TChecker`) in the file [config.py](./tlsep/config.py).
+
+- the user then **needs to change the current directory** to [tlsep](./tlsep/) 
+
+`tLsep` can now be used to learn a new ERA by executing the following:
 
 ```
 cd tlsep
-python3 ./tLsep.py --sul ../examples/<example-name> --m <max-constant>
+python3 ./tLsep.py --sul <path-to-example-file> --m <max-constant>
 ```
 
-The output of this command will be an `ERA` printed in the terminal, accepting the same language as the automaton mentioned as `sul`.
+The output of this command will be an `ERA` printed in the terminal, accepting the same language as the automaton specified as `sul`.
 
 The tool has been tested in MacOS and in a Docker container running Ubuntu 22.04.
