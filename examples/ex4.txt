@@ -1,0 +1,10 @@
+event:a{active}
+location:q0{initial,accepting}
+location:q1{}
+location:q2{accepting}
+transition:q0:q0:a:a>0
+transition:q0:q1:a:a==0
+transition:q1:q1:a:a>0&&a<1
+transition:q1:q2:a:a==0
+transition:q1:q2:a:a>=1
+transition:q2:q1:a:a>=0

@@ -1,0 +1,13 @@
+event:a{active}
+event:b{active}
+location:q1{initial,accepting}
+location:q2{accepting}
+location:q3{}
+transition:q1:q2:a:a==1
+transition:q1:q3:a:a<1
+transition:q1:q3:a:a>1
+transition:q1:q3:b:True
+transition:q2:q1:b:True
+transition:q2:q3:a:True
+transition:q3:q3:b:True
+transition:q3:q3:a:True
