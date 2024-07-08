@@ -7,7 +7,10 @@ examples/*
 !tlsep/
 tlsep/*
 !tlsep/*.py
-!tlsep/tmp/
+
+!tlsep/tmp
+tlsep/tmp/*
+!tlsep/tmp/*.txt
 
 !.gitignore
 !*.py
