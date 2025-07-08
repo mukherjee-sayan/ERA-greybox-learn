@@ -23,6 +23,9 @@ def build_era_from_file(infile: str) -> era.ERA:
         everything = f.readlines()
         
         for eachline in everything:
+            if eachline.startswith("#") or eachline.strip() == "":
+                continue
+
             values = eachline.strip().split(':') 
             
             if values[0] == 'event': # for lines starting with 'event'
